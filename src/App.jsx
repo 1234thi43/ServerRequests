@@ -6,6 +6,8 @@ function App() {
 	const [products, setProducts] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isCreating, setIsCreating] = useState(false);
+	const [isUpdating, setIsUpdating] = useState(false);
+	const [isDeleting, setIsDeleting] = useState(false);
 	const [refrashProductsFlag, setRefrashProductsFlag] = useState(false);
 
 	const refrashProducts = () => setRefrashProductsFlag(!refrashProductsFlag);
@@ -28,7 +30,7 @@ function App() {
 			headers: { 'Content-Type': 'application/json; charset=utf-8' },
 			body: JSON.stringify({
 				name: 'Пылесоc',
-				price: 2009,
+				price: 2500,
 			}),
 		})
 			.then((rawResponse) => rawResponse.json())
@@ -37,6 +39,37 @@ function App() {
 				refrashProducts();
 			})
 			.finally(() => setIsCreating(false));
+	};
+
+	const requestUpdatePhone = () => {
+		setIsUpdating(true);
+		fetch('http://localhost:3000/products/0002', {
+			method: 'PUT', // Еще есть PATCH. Для него нужно указывать только ту строку которая изменяется. Поэтому PUT более стабильно работает
+			headers: { 'Content-Type': 'application/json; charset=utf-8' },
+			body: JSON.stringify({
+				name: 'Телефон',
+				price: 1500,
+			}),
+		})
+			.then((rawResponse) => rawResponse.json())
+			.then((response) => {
+				console.log('Телефон обновился, ответ сервера: ', response);
+				refrashProducts();
+			})
+			.finally(() => setIsUpdating(false));
+	};
+
+	const requestDeleteTv = () => {
+		setIsDeleting(true);
+		fetch('http://localhost:3000/products/0001', {
+			method: 'DELETE',
+		})
+			.then((rawResponse) => rawResponse.json())
+			.then((response) => {
+				console.log('Телевизор удалён, ответ сервера: ', response);
+				refrashProducts();
+			})
+			.finally(() => setIsDeleting(false));
 	};
 
 	return (
@@ -51,7 +84,15 @@ function App() {
 				))
 			)}
 
-			<button disabled={isCreating} onClick={requestAddPilesos}>Добавить пылесос</button>
+			<button disabled={isCreating} onClick={requestAddPilesos}>
+				Добавить пылесос
+			</button>
+			<button disabled={isUpdating} onClick={requestUpdatePhone}>
+				Обновить телефон
+			</button>
+			<button disabled={isDeleting} onClick={requestDeleteTv}>
+				Удалить телевизор
+			</button>
 		</div>
 	);
 }
