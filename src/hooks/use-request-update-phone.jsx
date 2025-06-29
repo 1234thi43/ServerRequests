@@ -1,22 +1,23 @@
 import { useState } from 'react';
+import { ref, set } from 'firebase/database';
+import { db } from '../firebase';
 
-export const useRequestUpdatePhone = (refrashProducts) => {
+export const useRequestUpdatePhone = () => {
 	const [isUpdating, setIsUpdating] = useState(false);
 
 	const requestUpdatePhone = () => {
 		setIsUpdating(true);
-		fetch('http://localhost:3000/products/0002', {
-			method: 'PUT', // Еще есть PATCH. Для него нужно указывать только ту строку которая изменяется. Поэтому PUT более стабильно работает
-			headers: { 'Content-Type': 'application/json; charset=utf-8' },
-			body: JSON.stringify({
-				name: 'Телефон',
-				price: 1500,
-			}),
+
+		const phoneDbRef = ref(db, 'products/0002');
+
+		// так же есть функция update как patch у json
+
+		set(phoneDbRef, {
+			name: 'New Smatrphone',
+			price: 228228,
 		})
-			.then((rawResponse) => rawResponse.json())
 			.then((response) => {
 				console.log('Телефон обновился, ответ сервера: ', response);
-				refrashProducts();
 			})
 			.finally(() => setIsUpdating(false));
 	};

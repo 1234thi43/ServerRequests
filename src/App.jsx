@@ -1,5 +1,5 @@
 // import viteLogo from '/vite.svg'
-import { useState } from 'react';
+// import { useState } from 'react';
 
 import { useRequestGetProducts } from './hooks/use-request-get-produts';
 import { useRequestAddPilesos } from './hooks/use-request-add-pilesos';
@@ -9,22 +9,22 @@ import { useRequestDeleteTv } from './hooks/use-request-delete-tv';
 import styles from './App.module.css';
 
 function App() {
-	const [refrashProductsFlag, setRefrashProductsFlag] = useState(false);
+	// const [refrashProductsFlag, setRefrashProductsFlag] = useState(false);
 
-	const refrashProducts = () => setRefrashProductsFlag(!refrashProductsFlag);
+	// const refrashProducts = () => setRefrashProductsFlag(!refrashProductsFlag);
 
-	const { isLoading, products } = useRequestGetProducts(refrashProductsFlag);
+	const { isLoading, products } = useRequestGetProducts();
 
-	const { isCreating, requestAddPilesos } = useRequestAddPilesos(refrashProducts);
-	const { isUpdating, requestUpdatePhone } = useRequestUpdatePhone(refrashProducts);
-	const { isDeleting, requestDeleteTv } = useRequestDeleteTv(refrashProducts);
+	const { isCreating, requestAddPilesos } = useRequestAddPilesos();
+	const { isUpdating, requestUpdatePhone } = useRequestUpdatePhone();
+	const { isDeleting, requestDeleteTv } = useRequestDeleteTv();
 
 	return (
 		<div className={styles.app}>
 			{isLoading ? (
 				<div className={styles.loader}></div>
 			) : (
-				products.map(({ id, name, price }) => (
+				Object.entries(products).map(([id, { name, price }]) => (
 					<div key={id}>
 						{name} - {price} руб.
 					</div>

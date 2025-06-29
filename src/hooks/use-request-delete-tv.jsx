@@ -1,17 +1,18 @@
 import { useState } from 'react';
+import { ref, remove } from 'firebase/database';
+import { db } from '../firebase';
 
-export const useRequestDeleteTv = (refrashProducts) => {
+export const useRequestDeleteTv = () => {
 	const [isDeleting, setIsDeleting] = useState(false);
 
 	const requestDeleteTv = () => {
 		setIsDeleting(true);
-		fetch('http://localhost:3000/products/0001', {
-			method: 'DELETE',
-		})
-			.then((rawResponse) => rawResponse.json())
+
+		const removeTvDbRef = ref(db, 'products/0001');
+
+		remove(removeTvDbRef)
 			.then((response) => {
 				console.log('Телевизор удалён, ответ сервера: ', response);
-				refrashProducts();
 			})
 			.finally(() => setIsDeleting(false));
 	};

@@ -1,22 +1,21 @@
 import { useState } from 'react';
+import { ref, push } from 'firebase/database';
+import { db } from '../firebase';
 
-export const useRequestAddPilesos = (refrashProducts) => {
+export const useRequestAddPilesos = () => {
 	const [isCreating, setIsCreating] = useState(false);
 
 	const requestAddPilesos = () => {
 		setIsCreating(true);
-		fetch('http://localhost:3000/products', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json; charset=utf-8' },
-			body: JSON.stringify({
-				name: 'Пылесоc',
-				price: 2500,
-			}),
+
+		const productsDbRef = ref(db, 'products');
+
+		push(productsDbRef, {
+			name: 'Новый пылесос',
+			price: 5999,
 		})
-			.then((rawResponse) => rawResponse.json())
 			.then((response) => {
 				console.log('Пылесос добавлен, ответ сервера: ', response);
-				refrashProducts();
 			})
 			.finally(() => setIsCreating(false));
 	};
