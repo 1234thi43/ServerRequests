@@ -72,3 +72,23 @@
 	border: 2px solid black;
 	border-radius: 5px;
 }
+
+.green {
+	color: rgb(26, 166, 26);
+}
+
+.red {
+	color: red;
+}
+
+p {
+	margin: 0;
+}
+
+.Input {
+	min-height: 20px;
+	min-width: 40%;
+	border-radius: 5px;
+	border: 2px solid grey;
+	margin: 10px;
+}
