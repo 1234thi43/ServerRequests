@@ -1,6 +1,5 @@
-// import { ref, set } from 'firebase/database';
-// import { db } from '../firebase';
-
+import { ref, set } from 'firebase/database';
+import { db } from '../firebase';
 import { useState } from 'react';
 
 export const useRequestUpdateTodo = (refreshData, originalTodos) => {
@@ -8,17 +7,8 @@ export const useRequestUpdateTodo = (refreshData, originalTodos) => {
 	const [textForChangeTodo, setTextForChangeTodo] = useState('');
 	const [completedStatus, setCompletedStatus] = useState(false);
 
-	const URL_TODOS = 'http://localhost:3000/todos';
-
 	const requestUpdateTodo = () => {
 		if (!idForChangeTodo) return;
-
-		const URL_FOR_CHANGE = `${URL_TODOS}/${idForChangeTodo}`;
-
-		if (!Array.isArray(originalTodos)) {
-			console.error('originalTodos is not an array');
-			return;
-		}
 
 		const todoToUpdate = originalTodos.find(
 			(todo) => String(todo.id) === String(idForChangeTodo),
@@ -26,15 +16,10 @@ export const useRequestUpdateTodo = (refreshData, originalTodos) => {
 
 		if (!todoToUpdate) return;
 
-		const updatedData = {
+		const todoRef = ref(db, `todos/${idForChangeTodo}`);
+		set(todoRef, {
 			title: textForChangeTodo || todoToUpdate.title,
 			completed: completedStatus,
-		};
-
-		fetch(URL_FOR_CHANGE, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json; charset=utf-8' },
-			body: JSON.stringify(updatedData),
 		}).then(() => {
 			refreshData();
 			setIdForChangeTodo('');

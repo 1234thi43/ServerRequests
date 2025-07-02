@@ -9,13 +9,10 @@ import { useRequestSortTodo } from './hooks/use-request-sort-todo';
 
 function App() {
 	const [refreshFlag, setRefreshFlag] = useState(false);
-
 	const [searchQuery, setSearchQuery] = useState('');
-
 	const refreshData = () => setRefreshFlag(!refreshFlag);
 
 	const { todos, originalTodos, isLoading, setTodos } = useRequestGetTodos(refreshFlag);
-
 	const { newTodo, setNewTodo, requestAddTodo } = useRequestAddTodo(refreshData);
 	const {
 		idForChangeTodo,
@@ -34,15 +31,13 @@ function App() {
 		searchQuery,
 	);
 
-	const URL_TODOS = 'http://localhost:3000/todos';
-
 	const handleSearch = (query) => {
 		setSearchQuery(query);
 		if (query.trim() === '') {
 			setTodos(originalTodos);
 		} else {
 			const filtered = originalTodos.filter((todo) =>
-				todo.title.toLowerCase().includes(query.toLowerCase()),
+				String(todo.title).toLowerCase().includes(query.toLowerCase()),
 			);
 			setTodos(filtered);
 		}
